@@ -1,0 +1,195 @@
+@charset "utf-8";
+#wrap {
+	height: auto;
+	width: 1350px;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+}
+#topmenu {
+	float: right;
+	height: 41px;
+	width: 324px;
+	margin-right: 165px;
+}
+#topmenu ul {
+	list-style-type: none;
+}
+#topmenu ul li {
+	list-style-position: inside;
+}
+
+
+
+#page_header {
+	clear: both;
+	float: left;
+	height: 195px;
+	width: 1350px;
+}
+#header_topmenu {
+	float: left;
+	height: 41px;
+	width: 1350px;
+	background-color: #25211f;
+}
+#header_search {
+	background-color: #443b33;
+	float: left;
+	height: 105px;
+	width: 1350px;
+}
+#header_navi {
+	float: left;
+	height: 50px;
+	width: 1020px;
+	margin-right: 0px;
+	margin-left: 165px;
+}
+.bannerset1 {
+	clear: both;
+	float: left;
+	height: 161px;
+	width: 1026px;
+	margin-left: 165px;
+	margin-top: 25px;
+}
+
+.bannerset2 {
+	clear: both;
+	float: left;
+	height: 546px;
+	width: 1027px;
+	margin-top: 25px;
+	margin-left: 165px;
+}
+.bannerset3in {
+	clear: both;
+	float: left;
+	height: 450px;
+	width: 1027px;
+	margin-left: 165px;
+}
+#bannerset3in-1 {
+	float: left;
+	height: 450px;
+	width: 281px;
+}
+#bannerset3in-2 {
+	float: left;
+	height: 450px;
+	width: 246px;
+}
+#bannerset3in-3 {
+	float: left;
+	height: 450px;
+	width: 245px;
+}
+#bannerset3in-4 {
+	float: left;
+	height: 450px;
+	width: 255px;
+}
+.bestproduct {
+	clear: both;
+	float: left;
+	height: 472px;
+	width: 1027px;
+	margin-left: 165px;
+	margin-top: 25px;
+}
+.newproduct {
+	clear: both;
+	float: left;
+	height: 472px;
+	width: 1027px;
+	margin-top: 25px;
+	margin-left: 165px;
+}
+#newproduct-top {
+	float: left;
+	height: 50px;
+	width: 1027px;
+}
+#newproduct-1 {
+	float: left;
+	height: 422px;
+	width: 283px;
+}
+#newproduct-2 {
+	float: left;
+	height: 422px;
+	width: 245px;
+}
+#newproduct-3 {
+	float: left;
+	height: 422px;
+	width: 247px;
+}
+#newproduct-4 {
+	float: left;
+	height: 422px;
+	width: 252px;
+}
+
+
+
+
+
+
+
+#bestprodunct-top {
+	float: left;
+	height: 53px;
+	width: 1027px;
+}
+#bestproduct-1 {
+	float: left;
+	height: 419px;
+	width: 255px;
+}
+#bestproduct-2 {
+	float: left;
+	height: 419px;
+	width: 258px;
+}
+#bestproduct-3 {
+	float: left;
+	height: 419px;
+	width: 256px;
+}
+#bestproduct-4 {
+	float: left;
+	height: 419px;
+	width: 256px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#page_center {
+	clear: both;
+	float: left;
+	height: 400px;
+	width: 1350px;
+	background-image: url(image/file_1479356335888.jpg);
+}
+.bannerset3 {
+	clear: both;
+	float: left;
+	height: 500px;
+	width: 1350px;
+	margin-top: 25px;
+	background-image: url(image/file500.png);
+}
