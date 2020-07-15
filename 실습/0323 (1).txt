@@ -1,0 +1,122 @@
+[0322] 
+
+class Student.java
+
+package my.school;
+
+public class Student {
+   private String id;    //멤버변수-> 클래스내 어디에서나 인식 가능
+   private String name;
+   private int hakban;
+   private String password;
+   
+   public String getId() {
+	return id;
+}
+
+
+public void setId(String id) {
+	this.id = id;   //자신의 아이디 값을 setter로 대체해라
+}
+
+
+public String getName() {
+	return name;
+}
+
+
+public void setName(String name) {
+	this.name = name;
+}
+
+
+public int getHakban() {
+	return hakban;
+}
+
+
+public void setHakban(int hakban) {
+	this.hakban = hakban;
+}
+
+
+public int age(){    //age() -> 메소드
+	   int temp=10 ;    //temp -> 지역변수, 메소드내에서만 사용 가능
+	   return temp ;    // 교수 설명(예) 
+   }
+
+
+public String getPassword() {
+	return password;
+}
+
+
+public void setPassword(String password) {
+	this.password = password;
+}
+}
+
+javaTest.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="my.school.Student" %>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+   Student student = new Student();
+ // 클래스      객체                 생성자
+   student.setId("kjh");
+   student.setName("김정현");
+   student.setHakban(2014316040); //hakbun은 int타임 "있으면 안됨
+   student.setPassword("릭 오웬스");
+%>
+여기서 출력!! <br><br>
+Id = <%= student.getId() %> <br>
+Name = <%=student.getName() %> <br>
+Hakban = <%=student.getHakban() %> <br>
+password = <%=student.getPassword() %> <br>
+</body>
+</html>
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="my.school.Student" %>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+   Student student = new Student();
+ // 클래스      객체                 생성자
+   student.setId("kjh");
+   student.setName("김정현");
+   student.setHakban(2014316040); //hakbun은 int타임 "있으면 안됨
+   student.setPassword("릭 오웬스");
+   application.setAttribute("stud", student);   //에플리케이션 속성 설정하기
+   
+ 
+%>
+여기서 출력!! <br><br>
+                      
+Id = <%= student.getId() %> <br>
+Name = <%=student.getName() %> <br>
+Hakban = <%=student.getHakban() %> <br>
+password = <%=student.getPassword() %> <br>
+<% Student student1=(Student)application.getAttribute("stud"); %>   //stud라는 속성 값으로 출력하기
+Student Id = <%=student1.getId() %>
+Student Name = <%=student1.getName() %>
+Student Hakban=<%=student1.getHakban() %> 
+</body>
+</html>
+
+

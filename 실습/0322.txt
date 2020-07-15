@@ -1,0 +1,198 @@
+[0322]
+message
+notice+notice.txt
+애플리케이션 기본객체를 활용한 리소스 읽기 예제!
+appl+resource
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page import="java.io.*" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	FileReader fr =null;
+	char[] buff=new char[20]; //파일에서 읽은 것을 임시로 저장
+	int len= -1;
+	try{
+		fr =new FileReader("D:\\workspace2\\0322\\WebContent\\message\\notice\\notice.txt");
+		while((len= fr.read(buff))!= -1 ) {
+		out.print(new String(buff,0,len));
+	}
+	}catch (IOException e){
+		out.println("exception"+e.getMessage());
+	}finally{
+		if(fr !=null)fr.close();
+	}
+%>
+</body>
+</html>
+
+appl+resource2
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page import="java.io.*" %>
+    <%@ page import="java.net.URL" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	String resourcePath="/message/notice/notice.txt";
+	BufferedReader fr =null;
+	char[] buff=new char[20]; //파일에서 읽은 것을 임시로 저장
+	int len= -1;
+	try{
+		URL url=application.getResource(resourcePath);
+		fr =new BufferedReader(new InputStreamReader(url.openStream()));
+		while((len= fr.read(buff))!= -1 ) {
+		out.print(new String(buff,0,len));
+	}
+	}catch (IOException e){
+		out.println("exception"+e.getMessage());
+	}finally{
+		if(fr !=null)fr.close();
+	}
+%>
+</body>
+</html>
+
+attribute+setAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	application.setAttribute("manager", "예진");
+	application.setAttribute("version", "3.0.1");
+	application.setAttribute("madeDate", new java.util.Date());
+	application.setAttribute("userNumber", 10);
+%>
+애플리케이션 속성설정 완료
+</body>
+</html>
+
+attribute+getAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+manager=<%= application.getAttribute("manager") %><br>
+version=<%= application.getAttribute("version") %><br>
+made date=<%= application.getAttribute("madeDate") %><br>
+user number=<%= application.getAttribute("userNumber") %>
+</body>
+</html>
+
+attribute+getAllAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ page import="java.util.Enumeration" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Enumeration<String> attribs= application.getAttributeNames();
+	while(attribs.hasMoreElements()) {
+		String attrib= attribs.nextElement();
+		out.println(attrib+"="+application.getAttribute(attrib)+"<br>");
+	}
+%>
+</body>
+</html>
+
+request+setAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	request.setAttribute("address", "서울");
+	request.setAttribute("weight", 30);
+	request.setAttribute("ID", "2015316011");
+	//response.sendRedirect("getAttribute.jsp");//속성값이 전달 될수 있을까? request동안에만 살아있음
+%>
+address=<%= request.getAttribute("address") %><br>
+<%
+	int weight=(Integer)request.getAttribute("weight");
+	out.println("weight="+weight+"<br>");
+%>
+</body>
+</html>
+
+request+getAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+address=<%=request.getAttribute("address") %> <br>
+</body>
+</html>
+
+java Resource+package+my.info+class+Contact
+package my.info;
+
+public class Contact {
+	public String address;
+	public String phone;
+	public String mobile;
+}
+
+objectAttribute+setAttribute
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+  <%@page import="my.info.Contact" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Contact contact= new Contact();
+	contact.address="안산";
+	contact.address="041-333-4252";
+	contact.address="010-3675-5752";
+	application.setAttribute("myInfo",contact);
+%>
+애플리케이션 속성설정이 끝났습니다.
+<%
+	Contact myInfo =(Contact)application.getAttribute("myInfo");
+%>
+주소=<%=myInfo.address %><br>
+전화번호=<%=myInfo.phone %><br>
+핸폰=<%=myInfo.mobile %><br>
+</body>
+</html>

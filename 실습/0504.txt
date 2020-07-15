@@ -1,0 +1,253 @@
+0504
+화요일까지 과제 product 라는 테이블 만들고 
+===================================================================================================================================
+0503.zip파일 import해서 넣을것 --> 버전이 다른경우 오류 뜨는데 properties에서 jre버전을 바꿔서 설정해 주면 됨
+===================================================================================================================================
+<<select>> connection 
+===================================================================================================================================
+StudentDao.java
+package my.dao;
+
+import java.sql.*;
+import my.model.Student;
+
+public class StudentDao {
+
+	public int insert (Connection conn, Student student) throws SQLException {
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement
+			("insert into student (name, depart, age) values (?,?,?)");
+			pstmt.setString(1, student.getName());
+			pstmt.setString(2, student.getDepart());
+			pstmt.setInt(3, student.getAge());
+			return pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
+	}
+	
+	public int update (Connection conn, Student student) throws SQLException {
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement
+			("update student set name=?, depart=?, age=? where studentId=?");
+			pstmt.setString(1, student.getName());
+			pstmt.setString(2, student.getDepart());
+			pstmt.setInt(3, student.getAge());
+			pstmt.setInt(4, student.getStudentId());
+			return pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
+	}
+	
+	public Student select (Connection conn, int studentId) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs =null;
+		try{
+			pstmt = conn.prepareStatement("select* from student Where studentId = ?");
+			pstmt.setInt(1, studentId);
+			rs = pstmt.executeQuery();
+			if (rs.next()){
+				Student student = new Student();
+				student.setStudentId(rs.getInt("studentId"));
+				student.setName(rs.getString("name"));
+				student.setDepart(rs.getString("depart"));
+				student.setAge(rs.getInt("age"));
+				return student;
+				
+			}else{
+				return null;
+			}
+		}finally {
+			pstmt.close();
+			rs.close();
+		}
+		
+	}
+}
+-----------------------------------------------------------------------------------------------------------------------------------
+select+form
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+학생정보 입력: <br>
+<form action="select.jsp" method="post">
+	아이디: <input type="text" name="studentId" size="10"><br>
+	<input type="submit" value="입력">
+</form>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------------------------------------
+select+select
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import = "my.dao.StudentDao" %>
+<%@ page import = "my.jdbc.util.*" %>
+<%@ page import = "java.sql.*" %>    
+<%@ page import = "my.model.Student" %> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<%
+	Connection conn = ConnectionProvider.getConnection();
+	StudentDao studentDao = new StudentDao();
+	int studentId = Integer.parseInt(request.getParameter("studentId"));
+	int count =0;
+	Student student = null;
+	try {
+		student = studentDao.select(conn, studentId);
+	} catch (SQLException e) { }
+%>
+선택한 학생의 정보는
+아이디:<%= student.getStudentId() %>
+이름:<%= student.getName() %>
+학과:<%= student.getDepart()%>
+나이:<%= student.getAge() %>
+
+</body>
+</html>
+===================================================================================================================================
+<<Delete>>
+===================================================================================================================================
+public int delete(Connection conn, int studentId) throws SQLException {
+		PreparedStatement pstmt = null;
+		try{
+			pstmt = conn.prepareStatement("delete from student where studentId = ?");
+			pstmt.setInt(1, studentId);
+			return pstmt.executeUpdate();
+		} finally {
+			pstmt.close();
+		}
+	}
+	
+----------------------------------------------------------------------------------------------------------------------------------
+delete+delete
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import = "my.dao.StudentDao" %>
+<%@ page import = "my.jdbc.util.*" %>
+<%@ page import = "java.sql.*" %>    
+<%@ page import = "my.model.Student" %> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<%
+	Connection conn = ConnectionProvider.getConnection();
+	StudentDao studentDao = new StudentDao();
+	int studentId = Integer.parseInt(request.getParameter("studentId"));
+	int count =0;
+	try {
+		count = studentDao.delete(conn, studentId);
+	} catch (SQLException e) { }
+%>
+
+<%= count %>개의 학생정보 삭제 <br>
+<%= studentId %> 아이디의 학생정보 삭제
+
+
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------------------------------------
+delete+ form
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+삭제할 학생 정보 입력: <br>
+<form action="delete.jsp" method="post">
+	아이디: <input type="text" name="studentId" size="10"><br>
+	<input type="submit" value="입력">
+</form>
+</body>
+</html>
+===================================================================================================================================
+3studentList
+public List<Student> selectList (Connection conn) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs =null;
+		try{
+			pstmt = conn.prepareStatement("select* from student");
+			rs = pstmt.executeQuery(); //전체 레코드 가져오기
+			if (rs.next()){
+				List<Student> studentList =new ArrayList<Student>();
+				do {
+					Student student = new Student();
+					student.setStudentId(rs.getInt("studentId"));
+					student.setName(rs.getString("name"));
+					student.setDepart(rs.getString("depart"));
+					student.setAge(rs.getInt("age"));
+					studentList.add(student);
+				}while  (rs.next());
+					return studentList;
+				
+			}else{
+				return null;
+			}
+		}finally {
+			pstmt.close();
+			rs.close();
+		}
+		
+	}
+------------------------------------------------------------------------------------------------------------------------------------
+selectList
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import = "my.dao.StudentDao" %>
+<%@ page import = "my.jdbc.util.*" %>
+<%@ page import = "java.sql.*" %>   
+<%@ page import = "java.util.*" %>  
+<%@ page import = "my.model.Student" %> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<%
+	Connection conn = ConnectionProvider.getConnection();
+	StudentDao studentDao = new StudentDao();
+	List<Student> studentList = new ArrayList<Student>();
+	try {
+		studentList = studentDao.selectList(conn);
+	} catch (SQLException e) { }
+%>
+
+모든 학생의 정보는:<br>
+<%
+	for(Student student: studentList ){
+%>
+	아이디:<%= student.getStudentId() %>
+	이름:<%= student.getName() %>
+	학과:<%= student.getDepart()%>
+	나이:<%= student.getAge() %>
+<%
+	}
+%>
+</body>
+</html>

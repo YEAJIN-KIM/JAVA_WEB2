@@ -1,0 +1,50 @@
+0419
+겨수님이이미이이임 어디가셔써여어어어
+엉엉엉ㅇ엉어엉엉엉엉 06학번이시립니다... 대선배...
+가르마가 굉장히 정갈하십니다... 오.... 깔끔쓰.. 이마가 사다리꼴이에여... 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+jsp..★ 데이터베이스 프로그래밍 기초
+DB
+SQL; 구조화된 질의 언어/데이터베이스를 사용할때 자바말고 이 언어를 사용하게따!
+커넥션 풀; 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+==================================================================================================================
+중간고사는 개론/ 코딩....(구문 빈칸채우기) 기말: 텀프로젝트 미리미리 코딩해놓으세요오오오
+==================================================================================================================
+MYSQL Query Browser
+localhost
+root 
+
+create database chap12;
+
+use chap12;
+
+create table MEMBER (
+	MEMBERID VARCHAR(10)  NOT NULL PRIMARY KEY,
+	PASSWORD VARCHAR(10)  NOT NULL,
+	NAME VARCHAR(20)  NOT NULL,
+	EMAIL VARCHAR(80)  
+)
+
+INSERT INTO MEMBER(MEMBERID,PASSWORD, NAME)
+values('madvirus','1234','김예진');
+
+INSERT INTO MEMBER(MEMBERID,PASSWORD, NAME)
+values('abc','567','홀길동');
+
+INSERT INTO MEMBER(MEMBERID,PASSWORD, NAME)
+values('zxcv','4567','이유나','5670@naver.com');
+
+SELECT* FROM MEMBER;
+
+SELECT MEMBERID, NAME FROM MEMBER;
+
+UPDATE MEMBER SET NAME='이몽룡' WHERE MEMBERID ='zxcv';
+
+DELETE FROM MEMBER WHERE MEMBERID='abc';
+
+SELECT* FROM MEMBER order by NAME ASC;
+
+WHRER is_friend = true AND like= true
+order by NAME
+limit 1

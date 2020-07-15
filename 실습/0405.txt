@@ -1,0 +1,285 @@
+0405
+=================================================================================================================
+cookie -> java
+1.nam 2.value 3.path 4.domain 5.유효시점
+왜 사용해? 로그인 관리!
+=================================================================================================================
+java resource+package(util)+cookiebox.java -> UTF-8로 변환
+
+package util;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import java.util.Map;
+import java.net.URLEncoder; 
+import java.net.URLDecoder; 
+import java.io.IOException; 
+
+public class CookieBox {
+    
+    private Map<String, Cookie> cookieMap = new java.util.HashMap<String, Cookie>();
+    
+    public CookieBox(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (int i = 0 ; i < cookies.length ; i++) {
+                cookieMap.put(cookies[i].getName(), cookies[i]);
+            }
+        }
+    }
+    
+    public static Cookie createCookie(String name, String value)
+    throws IOException {
+        return new Cookie(name, URLEncoder.encode(value, "utf-8"));
+    }
+
+    public static Cookie createCookie(String name, String value, String path, 
+        int maxAge) throws IOException {
+        Cookie cookie = new Cookie(name, URLEncoder.encode(value, "utf-8"));
+        cookie.setPath(path);
+        cookie.setMaxAge(maxAge);
+        return cookie;
+    }
+    
+    public static Cookie createCookie(String name, String value, String domain,
+            String path, int maxAge) throws IOException {
+        Cookie cookie = new Cookie(name, URLEncoder.encode(value, "utf-8"));
+        cookie.setDomain(domain);
+        cookie.setPath(path);
+        cookie.setMaxAge(maxAge);
+        return cookie;
+    }
+    
+    public Cookie getCookie(String name) {
+        return cookieMap.get(name); 
+    }
+    
+    public String getValue(String name) throws IOException {
+        Cookie cookie = cookieMap.get(name);
+        if (cookie == null) {
+            return null;
+        }
+        return URLDecoder.decode(cookie.getValue(), "utf-8");
+    }
+
+    public boolean exists(String name) {
+        return cookieMap.get(name) != null;
+    }
+}
+
+
+=================================================================================================================
+cookiebox에 web타입으로 저장/ 5가지속성을 주고 쿠키를 만들 수 있음
+==================================================================================================================
+
+cookie+makecookie
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="util.CookieBox" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	response.addCookie(CookieBox.createCookie("id", "yeajin","/",-1));
+	response.addCookie(CookieBox.createCookie("password", "123456","/",-1)); //웹브라우져 살아있는 동안 쿠키박스에 저장해랏
+	response.addCookie(CookieBox.createCookie("name", "예진","/",-1));
+%>
+쿠키가 만들어졌습니다.<br>
+</body>
+</html>
+
+
+veiw+veiwCookie
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="util.CookieBox" %>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	CookieBox cookieBox = new CookieBox(request);
+	if(cookieBox.exists("id")){
+		Cookie cookie = cookieBox.getCookie("id");
+		out.println(cookie.getName()+"="+cookie.getValue()+"<br>");
+	}
+	
+	CookieBox cookieBox2 = new CookieBox(request);
+	if(cookieBox.exists("password")){
+		out.println("password ="+cookieBox.getValue("password")+"<br>");
+	}
+	
+	CookieBox cookieBox3 = new CookieBox(request);
+	if(cookieBox.exists("name")){
+			out.println("name ="+cookieBox.getValue("name")+"<br>");
+	
+	}
+	
+
+%>
+</body>
+</html>
+
+login+loginForm
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+로그인 하세요..<br><br>
+<form action="login.jsp" method="post">
+아이디:<input type="text" name="id" value="yeajin"><br>
+비번:<input type="text" name="password" value="123456"><br>
+<input type="submit" value="로그인">
+</form>
+</body>
+</html>
+
+login+login
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="util.CookieBox" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	String id =request.getParameter("id");
+	String password =request.getParameter("password");
+	if(id.equals(password)) {
+		response.addCookie(CookieBox.createCookie("LOGIN","SUCCESS","/",-1)); //로그인 쿠기만들고 success 값으로 줌+로그인 성공 여부를 알려면 이부분만 있으면 됨
+		response.addCookie(CookieBox.createCookie("ID",id,"/",-1));
+		out.println("로그인에 성공!");
+	}else{
+%>		
+<script>
+	alert("로그인 실패!");
+	history.go(-1);
+</script>
+
+<%} %>
+</body>
+</html>
+
+login+loginCheck
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="util.CookieBox" %>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	CookieBox cookieBox = new CookieBox(request);
+	boolean	login = cookieBox.exists("LOGIN") && 
+			cookieBox.getValue("LOGIN").equals("SUCCESS");
+	if(login){
+%>		
+<%= cookieBox.getValue("ID") %> 가 로그인한 상태입니다.		
+<%
+	} else{
+		out.println("로그인하지 않은 상태입니다.");
+	}
+%>
+</body>
+</html>
+
+login+logOut
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="util.CookieBox" %>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	response.addCookie(CookieBox.createCookie("LOGIN","","/",0)); //쿠키가 사라지니꺄 로그아웃
+	response.addCookie(CookieBox.createCookie("ID","","/",0));
+%>
+로그아웃 되었습니다.
+</body>
+</html>
+
+=======================================================================================================================================================
+session(세션) 
+쿠키가 아이디나 패스워드 같은 중요한 정보를 가지고 있는데 이게 uml을 타고 돌아다니면-> 도난사고!
+웹서버에서 생성되어서 웹서버에서 저장//브라우져 별로 세션 설정
+
+<%
+	session.setAttribute("ID","yeajin");
+	session.setAttribute("PASSWORD","123456");
+	session.setAttribute("NAME","예진");
+%>
+=======================================================================================================================================================
+
+session+makeSession
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+세션 객체를 만듭니다.
+<%
+	request.setCharacterEncoding("utf-8");  //한글은 리퀘스트를 타고 넘어갈때 인코딩을 필요로 함
+	session.setAttribute("ID",request.getParameter("id"));
+	session.setAttribute("PASSWORD",request.getParameter("password"));
+	session.setAttribute("NAME",request.getParameter("name"));
+%>
+id=<%= session.getAttribute("ID") %> <br>
+password=<%= session.getAttribute("PASSWORD") %> <br>
+name=<%= session.getAttribute("NAME") %> <br>
+</body>
+</html>
+
+session+loginForm
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+로그인 하세요..<br><br>
+<form action="makeSession.jsp" method="post">
+아이디:<input type="text" name="id" value="yeajin" size="10"><br>
+비번:<input type="text" name="password" value="123456" size="10"><br>
+이름:<input type="text" name="name" value="예진" ><br>
+<input type="submit" value="로그인">
+</form>
+</body>
+</html>

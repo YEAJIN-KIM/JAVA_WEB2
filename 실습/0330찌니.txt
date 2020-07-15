@@ -1,0 +1,224 @@
+0330
+================================================================================================================
+쿠키;웹서버(톰켓에서 만들어짐)-클라이언트 쿠키저장소-저장-}
+도메인이 다르면 쿠키 생성이 되지 않습니당
+cookie.setPath("/"); response cookie앞에서 설정 본래 자신이 폴더 아니면 실행 안되지만 이경우는 사용가능
+왜냐구? 모든 패스에서 접근 가능하도록 열어주기 때문!
+자기가 속해있는 경로와 다른 경로의 저장인 경우 저장 안되나 루트는 경로가 달라도 저장이 가능!
+인코더는 왜 사용할까아?
+그거야 한글은 못표현하니까 변환해 주는거지! UTF-8!
+================================================================================================================
+
+makeCookie+makecookie
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie cookie =new Cookie("id","yeajin"); //서버에서 만들어짐
+	response.addCookie(cookie);//클라이언트에 발송.쿠키저장소에 저장
+	Cookie cookie1= new Cookie("password","123456");
+	response.addCookie(cookie1);
+	Cookie cookie2= new Cookie("name",URLEncoder.encode("예지니","utf-8"));
+	response.addCookie(cookie2);
+%>
+<%= cookie.getName() %> = <%= cookie.getValue() %> <br>
+<%= cookie1.getName() %> = <%= cookie1.getValue()%> <br>
+<%= cookie2.getName() %> = <%= URLDecoder.decode(cookie2.getValue(),"utf-8")%><br>
+</body>
+</html>
+
+makeCookie+viewCookie
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie[]cookies= request.getCookies();
+	if(cookies !=null && cookies.length >0) {
+		for(int i=0; i< cookies.length;i++)
+			out.println(cookies[i].getName()+"="
+		+URLDecoder.decode(cookies[i].getValue(),"utf-8")+"<br>");
+		
+	}
+
+%>
+</body>
+</html>
+
+makeCookie+viewCookie 업데이트
+주석처리 부분 제외 // 앞으로는 이런식 코딩
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+/* Cookie[]cookies= request.getCookies();
+	if(cookies !=null && cookies.length >0) {
+		for(int i=0; i< cookies.length;i++)
+			out.println(cookies[i].getName()+"="
+		+URLDecoder.decode(cookies[i].getValue(),"utf-8")+"<br>");
+		
+	} */
+	
+	Cookie[]cookies= request.getCookies();
+	if(cookies !=null && cookies.length >0) {
+		for(Cookie cookie : cookies)
+			out.println(cookie.getName()+"="
+				+URLDecoder.decode(cookie.getValue(),"utf-8")+"<br>");
+		
+	} 
+
+%>
+</body>
+</html>
+
+====================================================================================================
+쿠키저장소에 쿠키저장-> 리퀘스트가 가져옴-> 변경사항찾음-> 그다음 뭐라고? 바구고-> 리스폰스로 돌려줌
+ChangeCookie실행시 ViewCookie에 있는 값을 변경해서 viewCookie 실행시 바뀐 값으로 보여줌
+====================================================================================================
+
+ChangeCookie+ChangeCookie
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie[] cookies =request.getCookies();
+	if(cookies != null && cookies.length >0) {
+		for(Cookie cookie : cookies) {
+			if(cookie.getName().equals("id")){
+				Cookie temp =new Cookie("id","hyeajin"); //ChageCookie 폴더에 디폴트로 저장
+				temp.setPath("/");
+				response.addCookie(temp);//클라이언트에게 보내라
+			}
+		}
+		
+	}
+
+
+%>
+쿠키의 값이 변경되었습니다! <br>
+</body>
+</html>
+
+ChangeCookie+ChangeCookie2
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.net.URLEncoder"%>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie[] cookies =request.getCookies();
+	if(cookies != null && cookies.length >0) {
+		for(Cookie cookie : cookies) {
+			if(cookie.getName().equals("name")){
+				Cookie temp =new Cookie("name",URLEncoder.encode("준태는 바보","utf-8"));
+				//ChageCookie 폴더에 디폴트로 저장
+				temp.setPath("/");
+				response.addCookie(temp);//클라이언트에게 보내라
+				
+			}
+		}
+		
+	}
+
+
+%>
+쿠키의 값이 변경되었습니다! <br>
+</body>
+</html>
+
+==================================================================================
+왜 0이냐면 ...........
+====================================================================================
+DeleteCookie+DeleteCookie
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie[] cookies =request.getCookies();
+	if(cookies != null && cookies.length >0) {
+		for(Cookie cookie : cookies) {
+			if(cookie.getName().equals("id")){
+				Cookie temp =new Cookie("id",""); //ChageCookie 폴더에 디폴트로 저장
+				temp.setPath("/");
+				temp.setMaxAge(0);
+				response.addCookie(temp);//클라이언트에게 보내라
+			}
+		}
+		
+	}
+
+
+%>
+쿠키의 값이 변경되었습니다! <br>
+</body>
+</html>
+
+DeleteCookie+DeleteCookie2
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Cookie[] cookies =request.getCookies();
+	if(cookies != null && cookies.length >0) {
+		for(Cookie cookie : cookies) {
+			if(cookie.getName().equals("name")){
+				Cookie temp =new Cookie("name","");
+				temp.setPath("/");
+				temp.setMaxAge(0);
+				response.addCookie(temp);//클라이언트에게 보내라
+			}
+		}
+		
+	}
+
+
+%>
+쿠키의 값이 변경되었습니다! <br>
+</body>
+</html>
