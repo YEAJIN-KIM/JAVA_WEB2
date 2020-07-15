@@ -1,0 +1,90 @@
+@charset "utf-8";
+
+body {
+	font-family: "나눔고딕", "맑은 고딕", "돋움", Dotum, Verdana, Tahoma;
+	font-size: 9pt;
+	line-height:170%
+	color: #666;
+}
+
+
+#registerform {
+	border-top-width: 6px;
+	border-bottom-width: 5px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #dddddd;
+	border-bottom-color: #dddddd;
+	margin-top: 20px;
+	margin-left: 10px;
+}
+
+#registerform th {
+	height: 25px;
+	padding-top: 5px;
+	padding-left: 25px;
+	width: 100px;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #dddddd;
+	background-color: #efefef;
+}
+#registerform tr td {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #dddddd;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	text-align: left;
+	background-color: #FFF;
+}
+#wrap {
+	height: 547px;
+	width: 921px;
+}
+#topheader {
+	height: 137px;
+	width: 921px;
+}
+#topmenu {
+	height: 27px;
+	width: 921px;
+}
+
+#submenu1 {
+	height: 399px;
+	width: 211px;
+	padding-top: 10px;
+}
+#topmain {
+	height: 40px;
+	width: 425px;
+	float: left;
+	margin-top: 27px;
+}
+#toplogo {
+	float: left;
+	height: 62px;
+	width: 151px;
+	margin-top: 27px;
+	margin-right: 45px;
+	margin-left: 38px;
+}
+#menu2 {
+	float: right;
+	height: 399px;
+	width: 125px;
+}
+#menu1 {
+	float: left;
+	height: 399px;
+	width: 86px;
+}
+#main2 {
+	float: right;
+	height: 400px;
+	width: 710px;
+	padding-top: 10px;
+}
